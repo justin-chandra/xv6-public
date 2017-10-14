@@ -13,6 +13,7 @@
 #include "fs.h"
 #include "fcntl.h"
 
+#define NULL 0
 int
 main(int argc, char *argv[])
 {
@@ -43,7 +44,7 @@ main(int argc, char *argv[])
     read(fd, data, sizeof(data));
   close(fd);
 
-  wait(pid);
+  wait(NULL);
 
   exit(0);
     return 0;

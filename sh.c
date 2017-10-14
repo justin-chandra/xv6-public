@@ -10,7 +10,7 @@
 #define PIPE  3
 #define LIST  4
 #define BACK  5
-
+#define NULL 0
 #define MAXARGS 10
 
 struct cmd {
@@ -93,7 +93,8 @@ runcmd(struct cmd *cmd)
     lcmd = (struct listcmd*)cmd;
     if(fork1() == 0)
       runcmd(lcmd->left);
-    wait(pid);
+    //pid undeclared; set to NULL instead
+    wait(NULL);
     runcmd(lcmd->right);
     break;
 
@@ -117,8 +118,8 @@ runcmd(struct cmd *cmd)
     }
     close(p[0]);
     close(p[1]);
-    wait(pid);
-    wait(pid);
+    wait(NULL);
+    wait(NULL);
     break;
 
   case BACK:
@@ -166,7 +167,7 @@ main(void)
     }
     if(fork1() == 0)
       runcmd(parsecmd(buf));
-    wait(pid);
+    wait(NULL);
   }
   exit(0);
     return 0;
