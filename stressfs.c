@@ -46,4 +46,5 @@ main(int argc, char *argv[])
   wait();
 
   exit(0);
+    return 0;
 }

@@ -1800,4 +1800,5 @@ main(int argc, char *argv[])
   exectest();
 
   exit(0);
+    return 0;
 }

@@ -48,9 +48,9 @@ forktest(void)
   printf(1, "fork test OK\n");
 }
 
-int
-main(void)
+int main(void)
 {
   forktest();
   exit(0);
+    return 0;
 }
