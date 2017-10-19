@@ -26,9 +26,10 @@ sys_exit(void)
 }
 
     int
-sys_wait(int * pid)
+sys_wait(void)
 {
-    return wait(pid);
+    
+    return wait(0);
 }
 
     int
