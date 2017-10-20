@@ -26,10 +26,21 @@ sys_exit(void)
 }
 
     int
+sys_waitpid(void)
+{
+    return 0;
+    // return waitpid();
+}
+
+    int
 sys_wait(void)
 {
-    
-    return wait(0);
+    int w;
+    if (argint(0, &w) < 0)
+    {
+        return -1;
+    }
+    return wait(&w);
 }
 
     int

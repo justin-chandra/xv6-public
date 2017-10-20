@@ -312,6 +312,11 @@ wait(int * status)
     }
 }
 
+int waitpid(int pid, int * status, int options) 
+{
+    return 0;
+}
+
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
