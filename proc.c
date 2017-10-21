@@ -7,9 +7,6 @@
 #include "proc.h"
 #include "spinlock.h"
 
-//Audrey added during Lab of 10/20 at 5:07 PM
-#include "sys/wait.h"
-
 struct {
     struct spinlock lock;
     struct proc proc[NPROC];
@@ -342,7 +339,7 @@ int waitpid(int pid, int * status, int options)
         
     }
 
-    if (options == WNOHANG)
+    //if (options == WNOHANG)
     {
         //WNOHANG indicates waitpid() should not suspend processing of the calling thread if...
         //...status is not immediately available for one of the child processes specified by pid
