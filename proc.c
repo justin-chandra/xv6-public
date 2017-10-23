@@ -314,41 +314,11 @@ wait(int * status)
 
 int waitpid(int pid, int * status, int options) 
 {
-    //TODO: check if pid_t == (pid_t)-1 == -1
-    if (pid == -1)
-    {
-        //here, status is requested of any child process
-        //which basically means that it's the same thing as wait() here   
-    }
-
-    if (pid > 0)
-    {
-        //specifies the pid of a single child process whose status
-        //is requested
-    }
-
-    if (pid == 0)
-    {
-        //status is requested for any child process whose pid is equal
-        //to the pid of the calling thread
-    }
-
-    if (pid < -1)
-    {
-        //status is requested for any child process whose process group ID is equal to the absolute value of pid.
-        
-    }
-
-    //if (options == WNOHANG)
-    {
-        //WNOHANG indicates waitpid() should not suspend processing of the calling thread if...
-        //...status is not immediately available for one of the child processes specified by pid
-        //if WNOHANG is specified but no child process is readily available...
-        //waitpid() returns 0
-    }
-
-    //there are error conditions under errno
-    return 0;
+    //pass in a pid, status, and options
+    //wait until the pid is dead
+    //then return
+    wait(status); 
+    return pid;
 }
 
 //PAGEBREAK: 42
