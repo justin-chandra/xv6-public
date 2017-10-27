@@ -28,6 +28,12 @@ sys_exit(void)
     int
 sys_waitpid(void)
 {
+    int s;
+    if (argint(0, &s) < 0)
+    {
+        return -1;
+    }
+    return wait(&s);
     return 0;
     // return waitpid();
 }
