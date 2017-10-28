@@ -7,6 +7,8 @@
 #include "mmu.h"
 #include "proc.h"
 
+#define NULL 0
+
     int
 sys_fork(void)
 {
@@ -28,14 +30,19 @@ sys_exit(void)
     int
 sys_waitpid(void)
 {
-    int s;
-    if (argint(0, &s) < 0)
+    int pid;
+    int status;
+    int options = 0;
+    if (argint(0, &pid) < 0)
     {
         return -1;
     }
-    return wait(&s);
-    return 0;
-    // return waitpid();
+
+    if (argint(1, &status) < 0)
+    {
+        return -1;
+    }
+    return waitpid(pid, &status, options);
 }
 
     int
