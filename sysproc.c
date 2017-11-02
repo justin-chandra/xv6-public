@@ -48,12 +48,12 @@ sys_waitpid(void)
     int
 sys_wait(void)
 {
-    int w;
-    if (argint(0, &w) < 0)
+    int * w;
+    if (argptr(0, (char **) &w, sizeof(int*)) < 0)
     {
         return -1;
     }
-    return wait(&w);
+    return wait(w);
 }
 
     int
