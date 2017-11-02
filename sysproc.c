@@ -31,18 +31,18 @@ sys_exit(void)
 sys_waitpid(void)
 {
     int pid;
-    int status;
+    int * status;
     int options = 0;
     if (argint(0, &pid) < 0)
     {
         return -1;
     }
 
-    if (argint(1, &status) < 0)
+    if (argptr(1, (char **) &status, sizeof(int*)) < 0)
     {
         return -1;
     }
-    return waitpid(pid, &status, options);
+    return waitpid(pid, status, options);
 }
 
     int
