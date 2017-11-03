@@ -56,6 +56,17 @@ sys_wait(void)
     return wait(w);
 }
 
+	int
+sys_setpriority(void)
+{
+	int p;
+	if (argint(0, &p) < 0)
+	{
+		return -1;
+	}
+	return setpriority(p);
+}
+
     int
 sys_kill(void)
 {

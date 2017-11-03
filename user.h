@@ -6,6 +6,7 @@ int waitpid(int pid, int * status, int options);
 int fork(void);
 int exit(int status)__attribute__((noreturn));
 int wait(int * status);
+int setpriority(int priority);
 int pipe(int*);
 int write(int, void*, int);
 int read(int, void*, int);

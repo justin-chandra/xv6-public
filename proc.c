@@ -90,7 +90,7 @@ allocproc(void)
 found:
     p->state = EMBRYO;
     p->pid = nextpid++;
-
+    p->priority = 20;
     release(&ptable.lock);
 
     // Allocate kernel stack.
@@ -302,14 +302,14 @@ wait(int * status)
                 {
                     *status = p->status;
                 } 
-				release(&ptable.lock);
+                release(&ptable.lock);
                 return pid;
             }
         }
 
         // No point waiting if we don't have any children.
         if(!havekids || curproc->killed){
-			*status = -1;
+            *status = -1;
             release(&ptable.lock);
             return -1;
         }
@@ -324,8 +324,6 @@ int waitpid(int pid, int * status, int options)
     //pass in a pid, status, and options
     //wait until the pid is dead
     //then return
-    // wait(status); 
-    // return pid;
     struct proc *p;
     int havekids;
     struct proc *curproc = myproc();
@@ -367,6 +365,27 @@ int waitpid(int pid, int * status, int options)
 
 }
 
+    int
+setpriority(int priority)
+{
+    struct proc *p;
+    struct proc * curproc = myproc();
+    // setting the process's parent
+    acquire(&ptable.lock);
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    {
+        if(p->parent != curproc)
+            continue;
+        curproc->priority = priority;
+        curproc->status = RUNNABLE;
+        sched();
+        break;
+    }
+    release(&ptable.lock);
+    return 0;
+}
+
+
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
@@ -378,46 +397,82 @@ int waitpid(int pid, int * status, int options)
     void
 scheduler(void)
 {
-    struct proc *p;
-    struct cpu *c = mycpu();
+    struct proc * p;
+    struct proc * hp;
+    struct cpu * c = mycpu();
     c->proc = 0;
 
-    for(;;){
-        // Enable interrupts on this processor.
+    for (;;)
+    {
         sti();
-
-        // Loop over process table looking for process to run.
         acquire(&ptable.lock);
-        for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-            if(p->state != RUNNABLE)
+        for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+        {
+            if (p->state != RUNNABLE)
                 continue;
-
-            // Switch to chosen process.  It is the process's job
-            // to release ptable.lock and then reacquire it
-            // before jumping back to us.
-            c->proc = p;
-            switchuvm(p);
-            p->state = RUNNING;
-
-            swtch(&(c->scheduler), p->context);
+            hp = p;
+            for (struct proc * i = ptable.proc; i < &ptable.proc[NPROC]; i++)
+            {
+                if (i->state != RUNNABLE)
+                    continue;
+                if (hp->priority > i->priority)
+                {
+                    hp = i;
+                }
+            }
+            c->proc = hp;
+            switchuvm(hp);
+            hp->state = RUNNING;
+            swtch(&(c->scheduler), hp->context);
             switchkvm();
-
-            // Process is done running for now.
-            // It should have changed its p->state before coming back.
             c->proc = 0;
         }
         release(&ptable.lock);
-
     }
 }
+/*
+   void
+   scheduler(void)
+   {
+   struct proc *p;
+   struct cpu *c = mycpu();
+   c->proc = 0;
 
+   for(;;){
+// Enable interrupts on this processor.
+sti();
+
+// Loop over process table looking for process to run.
+acquire(&ptable.lock);
+for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+if(p->state != RUNNABLE)
+continue;
+
+// Switch to chosen process.  It is the process's job
+// to release ptable.lock and then reacquire it
+// before jumping back to us.
+c->proc = p;
+switchuvm(p);
+p->state = RUNNING;
+
+swtch(&(c->scheduler), p->context);
+switchkvm();
+
+// Process is done running for now.
+// It should have changed its p->state before coming back.
+c->proc = 0;
+}
+release(&ptable.lock);
+
+}
+}
+*/
 // Enter scheduler.  Must hold only ptable.lock
 // and have changed proc->state. Saves and restores
 // intena because intena is a property of this
 // kernel thread, not this CPU. It should
 // be proc->intena and proc->ncli, but that would
-// break in the few places where a lock is held but
-// there's no process.
+// break in the few places where a lock is held but // there's no process.  
     void
 sched(void)
 {
