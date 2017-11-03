@@ -368,20 +368,10 @@ int waitpid(int pid, int * status, int options)
     int
 setpriority(int priority)
 {
-    struct proc *p;
+    // struct proc *p;
     struct proc * curproc = myproc();
-    // setting the process's parent
-    acquire(&ptable.lock);
-    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-    {
-        if(p->parent != curproc)
-            continue;
-        curproc->priority = priority;
-        curproc->status = RUNNABLE;
-        sched();
-        break;
-    }
-    release(&ptable.lock);
+    curproc->priority = priority;
+    curproc->status = RUNNABLE;
     return 0;
 }
 
@@ -399,6 +389,7 @@ scheduler(void)
 {
     struct proc * p;
     struct proc * hp;
+    struct proc * i;
     struct cpu * c = mycpu();
     c->proc = 0;
 
@@ -411,7 +402,7 @@ scheduler(void)
             if (p->state != RUNNABLE)
                 continue;
             hp = p;
-            for (struct proc * i = ptable.proc; i < &ptable.proc[NPROC]; i++)
+            for (i = ptable.proc; i < &ptable.proc[NPROC]; i++)
             {
                 if (i->state != RUNNABLE)
                     continue;
