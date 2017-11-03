@@ -409,7 +409,7 @@ scheduler(void)
             {
                 if (j->state != RUNNABLE)
                     continue;
-                if (highest_priority->priority > j->priority)
+                if (highest_priority->priority < j->priority)
                 {
                     highest_priority = j;
                 }
