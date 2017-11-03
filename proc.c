@@ -90,6 +90,7 @@ allocproc(void)
 found:
     p->state = EMBRYO;
     p->pid = nextpid++;
+    // CS153
     p->priority = 20; // 20 is default level
 
     release(&ptable.lock);
@@ -227,6 +228,7 @@ fork(void)
 // Exit the current process.  Does not return.
 // An exited process remains in the zombie state
 // until its parent calls wait() to find out it exited.
+// CS153
     void
 exit(int status)
 {
@@ -273,6 +275,7 @@ exit(int status)
 
 // Wait for a child process to exit and return its pid.
 // Return -1 if this process has no children.
+// CS153
     int
 wait(int * status)
 {
@@ -320,6 +323,7 @@ wait(int * status)
     }
 }
 
+// CS153
 int waitpid(int pid, int * status, int options) 
 {
     //pass in a pid, status, and options
@@ -368,6 +372,7 @@ int waitpid(int pid, int * status, int options)
 
 }
 
+// CS153
     int
 setpriority(int priority)
 {
@@ -386,6 +391,7 @@ setpriority(int priority)
 //  - swtch to start running that process
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
+// CS153
     void
 scheduler(void)
 {

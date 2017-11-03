@@ -10,13 +10,15 @@
 
 #define NULL 0
 
+// This file was made for CS153
+
 void hello();
 void wait_example();
 
 int main(int argc, char * argv[])
 {
-    wait_example();
-    // hello();
+    // wait_example();
+    hello();
     return 0;
 }
 

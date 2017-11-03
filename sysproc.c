@@ -15,6 +15,7 @@ sys_fork(void)
     return fork();
 }
 
+// modified in lab 1 CS153
     int
 sys_exit(void)
 {
@@ -27,6 +28,7 @@ sys_exit(void)
     return 0;  // not reached
 }
 
+// added in lab 1 CS153
     int
 sys_waitpid(void)
 {
@@ -45,6 +47,7 @@ sys_waitpid(void)
     return waitpid(pid, status, options);
 }
 
+// CS153
     int
 sys_wait(void)
 {
@@ -120,6 +123,7 @@ sys_uptime(void)
     return xticks;
 }
 
+// CS153
     int
 sys_setpriority(void)
 {

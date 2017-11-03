@@ -10,6 +10,8 @@
 
 #define NULL 0
 
+// exit and wait calls were modified for CS153
+
 char buf[8192];
 char name[3];
 char *echoargv[] = { "echo", "ALL", "TESTS", "PASSED", 0 };
